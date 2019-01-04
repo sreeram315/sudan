@@ -14,7 +14,6 @@ class TesterApp extends Component {
             <h1>{student.name}</h1>
           	)
         })}
-
       </div>
     )
   }
