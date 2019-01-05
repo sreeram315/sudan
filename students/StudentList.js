@@ -32,7 +32,6 @@ class StudentList extends Component {
     })
   }
   componentDidMount () {
-    let a = 0
     this.setState({
       StudentsDisplayed: StudentData
     })
