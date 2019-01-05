@@ -8,6 +8,8 @@ class StudentList extends Component {
     super(props)
     this.handleDataCallBack = this.handleDataCallBack.bind(this)
     this.handleDeleteStudentCallBack = this.handleDeleteStudentCallBack.bind(this)
+    this.reverseOrder = this.reverseOrder.bind(this)
+    this.sortByCGPA = this.sortByCGPA.bind(this)
     this.state = {
       StudentsDisplayed: null
     }
@@ -20,6 +22,7 @@ class StudentList extends Component {
       StudentsDisplayed: newStudents
     })
   }
+
   handleDeleteStudentCallBack (student) {
     let currentStudents = this.state.StudentsDisplayed
 
@@ -31,6 +34,29 @@ class StudentList extends Component {
       StudentsDisplayed: newStudents
     })
   }
+
+  reverseOrder (event) {
+    event.preventDefault()
+    let newStudents = this.state.StudentsDisplayed
+    this.setState({
+      StudentsDisplayed: newStudents.reverse()
+    })
+  }
+
+  sortByCGPA (event) {
+    event.preventDefault()
+
+    let newStudents = this.state.StudentsDisplayed
+    // newStudents.sort((a, b) => a.reg_no < b.reg_no)
+    newStudents.sort(function (a, b) {
+      return b.cgpa - a.cgpa
+    })
+    console.log(newStudents)
+    this.setState({
+      StudentsDisplayed: newStudents
+    })
+  }
+
   componentDidMount () {
     this.setState({
       StudentsDisplayed: StudentData
@@ -40,6 +66,8 @@ class StudentList extends Component {
     let { StudentsDisplayed } = this.state
     return (
       <div>
+        <button onClick={this.reverseOrder}>Reverse order</button>&ensp;
+        <button onClick={this.sortByCGPA}>Sort by CGPA</button>
         { StudentsDisplayed !== null && StudentsDisplayed.length !== 0
           ? <div onClick={this.titleClicked}>
             <h1> Student List:  </h1>
