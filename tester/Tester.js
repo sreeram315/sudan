@@ -8,34 +8,38 @@ import TesterData from '../data/tester_data.json'
 class TesterApp extends Component {
   constructor (props) {
     super(props)
-    this.toggleData = this.toggleData.bind(this)
+    this.toggleCount = this.toggleCount.bind(this)
     this.state = {
-    	showData: true
+    	count: 0,
+    	doCount: false
     }
   }
-  toggleData (event) {
+  toggleCount (event) {
     event.preventDefault()
     this.setState({
-    	showData: !this.state.showData
+    	doCount: !this.state.doCount
     })
   }
   render () {
-  	const { showData } = this.state
+  	const { count } = this.state
     return (
-
       <div>
-        {TesterData.map((student, index) => {
-          return (
-            <div>
+        <button onClick={this.toggleCount}> start/stop count</button>
+        <h1> {count}</h1>
 
-              {showData === true ? <h1>{student.name}</h1> : ''}
-              <button onClick={this.toggleData}> Show/hide </button>
-
-            </div>
-          	)
-        })}
       </div>
+
     )
+  }
+
+  componentDidMount () {
+  	this.myInterval = setInterval(() => {
+  		if (this.state.doCount) {
+	  		this.setState(prevState => ({
+	  			count: prevState.count + 1
+	  		}))
+  	}
+  	}, 1)
   }
 }
 
