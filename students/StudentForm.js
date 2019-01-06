@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import Dropzone from 'react-dropzone'
 
 
 class InputBlock extends Component{
@@ -62,6 +62,11 @@ class StudentForm extends Component {
     console.log(this.state)
   }
 
+  handleOnDrop = (acceptedFiles, rejectedFiles) => {
+      console.log(acceptedFiles)
+      console.log(rejectedFiles)
+   }
+
   componentDidMount () {
     // this.inputFullNameRef.current.focus()
   }
@@ -77,6 +82,19 @@ class StudentForm extends Component {
           <button onClick={this.clearNameField}>Clear name field</button>&ensp;
           <button>Save</button>
         </form>
+
+
+     <Dropzone onDrop={this.handleOnDrop}>
+      {({getRootProps}) => (
+
+          <div {...getRootProps()}>
+          
+            <p>Drop files here, or click to select files</p>
+          </div>
+      )}
+    </Dropzone>
+
+
       </div>
 
     )

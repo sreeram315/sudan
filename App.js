@@ -12,6 +12,7 @@ import YoutubeVideo from './third_party/video.js'
 import Markdown from './third_party/markdown.js'
 import TesterApp from './tester/Tester.js'
 import TesterApp2 from './tester/Tester2.js'
+import TesterApp3 from './tester/Tester3.js'
 // Routers
 import DynamicRoutePage from './routingComps/DynamicRouteComp'
 import AboutPage from './routingComps/StaticRouteComp'
@@ -22,7 +23,7 @@ class App extends Component {
     // const input = '# This is a header\n\n***And this is a paragraph***'
     return (
       <div className='App' >
-        <StudentForm />
+        <TesterApp3 />
       </div>
     )
 
