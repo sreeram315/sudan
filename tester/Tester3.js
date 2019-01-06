@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 
 import Dropzone from 'react-dropzone'
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
+
+import {downloadBase64File, image64toCanvasRef, extractImageFileExtensionFromBase64, base64StringtoFile} from './utils'
 
 
 const parentStyle = {
@@ -19,33 +23,60 @@ const imgStyle = {
 class TesterApp3 extends Component {
 	constructor(props){
 		super(props)
+		this.croppedImagePreviewRef = React.createRef()
 		this.state = {
 			imgSrc: '',
-			te: 10
+			crop: {
+			  aspect: 1/1
+			}
 		}
 	}
 
   handleFileDrop = (files, rejectedFiles) => {
   	const file = files[0]
   	const reader = new FileReader()
+  	
   	reader.addEventListener("load", ()=>{
   		const imgresult = reader.result
   		this.setState({
   		imgSrc: imgresult
   	})
   	}, false)
-
   	reader.readAsDataURL(file)
-
-  	
   }
 
-  dropzoneChildren = () => {
-  	this.props.isFocused = true
+  handelImageOnChange = (crop) => {
+  	this.setState({crop:crop})
   }
-  handleOnDragEnter= () => {
-  	console.log("foccused")
+  handelImageOnCrop = (crop) => {
+  	// console.log(crop)
   }
+  handleCropOnComplete = (crop, pixelCrop) => {
+  	console.log(pixelCrop)
+  	const canvRef = this.croppedImagePreviewRef.current
+  	image64toCanvasRef(canvRef , this.state.imgSrc , pixelCrop)
+
+  }
+
+  downloadImage = (event) => {
+  	event.preventDefault()
+  	const canvRef = this.croppedImagePreviewRef.current
+  	const {imgSrc} = this.state
+  	const fileExtension = extractImageFileExtensionFromBase64(imgSrc)
+
+  	const image64 = canvRef.toDataURL('image/' + fileExtension)
+  	const downFilename = "somefile" + fileExtension
+  	downloadBase64File(image64,  downFilename)
+
+  	// for making file
+  	const fileName = base64StringtoFile(image64, downFilename )
+  	console.log(fileName)
+  }
+
+
+
+
+
 
    render() {
    	const {imgSrc} = this.state
@@ -54,7 +85,18 @@ class TesterApp3 extends Component {
     <div>
     	{imgSrc.length !== 0 
     		? 
-    			<div><img style={imgStyle} src={imgSrc}/></div>
+    			<div>
+    				<ReactCrop
+    					src={imgSrc}
+    					crop={this.state.crop}
+    					onChange={this.handelImageOnChange}
+    					onComplete={this.handleCropOnComplete}
+    				/><br/><br/>
+
+    				<canvas ref={this.croppedImagePreviewRef}></canvas><br/>
+    				<button onClick={this.downloadImage}> Download image</button>
+    			</div>
+    			
     		:
 		      <Dropzone onDrop={this.handleFileDrop} accept='image/*' multiple={true} onFocus={this.handleOnDragEnter} preventDropOnDocument={false}>
 		        {({getRootProps, getInputProps, isDragActive, isFocused}) => {
@@ -69,22 +111,17 @@ class TesterApp3 extends Component {
 		        }}
 		      </Dropzone>
   		}
-  		{imgSrc.length}
+  		
     </div>
 
     )
   }
+
+
+
+
 }
 
 
-       
-
-        
-        
-      
-  
-
-
-//
 
 export default TesterApp3
