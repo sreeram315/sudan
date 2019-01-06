@@ -10,7 +10,7 @@ class TesterApp extends Component {
     super(props)
     this.toggleCount = this.toggleCount.bind(this)
     this.state = {
-    	count: 0,
+    	count: 250,
     	doCount: false
     }
   }
@@ -35,9 +35,17 @@ class TesterApp extends Component {
   componentDidMount () {
   	this.myInterval = setInterval(() => {
   		if (this.state.doCount) {
+  			if (this.state.count === 0) {
+  				console.log('timeup')
+  				this.setState({
+  					count: 'Time up',
+  					doCount: false
+  				})
+  			} else {
 	  		this.setState(prevState => ({
-	  			count: prevState.count + 1
+	  			count: prevState.count - 1
 	  		}))
+	  	}
   	}
   	}, 1)
   }
